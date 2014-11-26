@@ -3,6 +3,52 @@ import sys
 import re
 import string
 from collections import OrderedDict
+
+#This function is shamelessly inspired by the instructions for HW5.
+#It is intended to produce the DOT files used as input for graphvisualize.
+def make_dotfiles(dotstring,names,numV):
+        profit=[0]*numV
+        adjacency=[[0]*numV for i in range(numV)]
+        weight=[[0]*numV for i in range(numV)]
+        dotstring="Graph G{\n"
+        #print dotstring
+        f=open(('output_first.dot'),'w')
+        f.write(dotstring)
+        f.close()
+
+	dotstring=dotstring+ "  node [fillcolor=none];\n"
+        #print dotstring
+        f=open(('output_second.dot'),'w')
+        f.write(dotstring)
+        f.close()
+
+        for i in range(0,numV):
+                dotstring=dotstring+"   "+ str(i) + "[label=%s %d;\n]" + str(names[i])+str(profit[i])
+                #print dotstring
+		f=open(('output'+str(00)+str(i)+'.dot'),'w')
+		f.write(dotstring)
+		f.close()
+                for j in range(0,numV):
+                        if(adjacency[i][j]==0):
+                                dotstring=dotstring+ "  "+ str(i) +" -- "+ str(j) +"[label="+str(weight[i][j])+"];\n"
+                                #print dotstring
+               			f=open(('output'+str(i)+str(j)+'.dot'),'w')
+        	        	f.write(dotstring)
+	                	f.close()
+                dotstring=dotstring+"%s\n"
+                #print dotstring
+                f=open(('output'+str(i)+'.dot'),'w')
+                f.write(dotstring)
+                f.close()
+        dotstring=dotstring+"};\n"
+        #print dotstring
+        f=open(('output_FINAL.dot'),'w')
+        f.write(dotstring)
+        f.close()
+
+
+
+
 """
 #So this function starts to build a graph for you. It is meant to add path by
 #path until the while loop that calls it finishes. The graph is a dict.
@@ -107,6 +153,7 @@ paths=[]
 paths = find_all_paths(graph, lines[1].split()[0], lines[nVert].split()[0])
 print paths
 
+make_dotfiles(paths,verticies,nVert)
 #These are just for checking values
 """
 for x in range(nVert):
