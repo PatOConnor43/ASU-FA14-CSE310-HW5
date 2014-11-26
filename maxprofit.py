@@ -2,8 +2,8 @@
 import sys
 import re
 import string
-#from collections import OrderedDict
-
+from collections import OrderedDict
+"""
 #So this function starts to build a graph for you. It is meant to add path by
 #path until the while loop that calls it finishes. The graph is a dict.
 def makeGraph(starting_node, ending_node, profit, time, aGraph):
@@ -12,6 +12,7 @@ def makeGraph(starting_node, ending_node, profit, time, aGraph):
     else:
         aGraph[starting_node].append([ending_node, profit, time])
         
+"""
 
 #This searches through each vertex in verticies to find one with a matching
 #name and it returns the index in verticies where it was found
@@ -22,6 +23,21 @@ def findEnd(name_of_node, list_of_vert):
             return i
 
 
+
+def find_all_paths(graph, start, end, path=[]):
+        path = path + [start]
+        print path
+        if start == end:
+            return [path]
+        if not start in graph:
+            return []
+        paths = []
+        for node in graph[start]:
+            if node not in path:
+                newpaths = find_all_paths(graph, node, end, path)
+                for newpath in newpaths:
+                    paths.append(newpath)
+        return paths
 
 #Read input file
 inFile = sys.argv[1]
@@ -41,10 +57,10 @@ nEdge = int(re.sub("[^0-9]", "", lines[nVert+1]))
 edge_start = []
 edge_end = []
 edge_time =[]
-edges = {}
+edges = OrderedDict()
 
 #Making an empty dict for graph
-graph = {}
+graph = OrderedDict()
 
 #This loop adds Verticies to the Verticies list in the form V = [Vertex_Name, Profit]
 #So this list will look like Verticies = [V1, V2,..., Vn]
@@ -66,9 +82,20 @@ for i in range(len(verticies)):
             j+=1
         else:
             go = False
-print edges
 
+#This creates a graph from the edges in the form graph[vertex_name] = [Connected_vertex, profit, time]
+#So a complete graph would be represented as
+#graph = {'A': [B, Profit, time], ..., 'B':[C, Profit, Time]..., ..., (until we get the final connections)}
+for i in edges:
+    ch = edges[i][0][0]
+    if ch in graph:
+        graph[ch].append([edges[i][1][0], edges[i][1][1], edges[i][2]])
+    else:
+        graph[ch] = [[edges[i][1][0], edges[i][1][1], edges[i][2]]]
 
+paths=[]
+paths = find_all_paths(graph, lines[1].split()[0], lines[nVert].split()[0], path=[])
+print paths
 
 #These are just for checking values
 """
