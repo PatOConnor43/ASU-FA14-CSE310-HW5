@@ -26,19 +26,29 @@ def findEnd(name_of_node, list_of_vert):
 
 def find_all_paths(graph, start, end, path=[]):
         path = path + [start]
-        print path
         if start == end:
             return [path]
         if not start in graph:
             return []
         paths = []
-        for node in graph[start]:
-            if node not in path:
-                newpaths = find_all_paths(graph, node, end, path)
-                for newpath in newpaths:
-                    paths.append(newpath)
+        for key in graph:
+            for entry in key:
+                if not entry[0] in path:
+                    newpaths = find_all_paths(graph, entry[0], end, path)
+                    for newpath in newpaths:
+                        paths.append(newpath)
         return paths
 
+#Didn't work as expected
+"""
+def deleteDead(newpaths, graph):
+    for i in newpaths:
+        for j in i:
+            for k in graph[j]:
+                if not i.next() in graph[j][k] and k == len(graph[j]):
+                    return newpaths.remove(i)
+    return newpaths
+"""
 #Read input file
 inFile = sys.argv[1]
 lines = open(inFile,'r').readlines()
@@ -94,7 +104,7 @@ for i in edges:
         graph[ch] = [[edges[i][1][0], edges[i][1][1], edges[i][2]]]
 
 paths=[]
-paths = find_all_paths(graph, lines[1].split()[0], lines[nVert].split()[0], path=[])
+paths = find_all_paths(graph, lines[1].split()[0], lines[nVert].split()[0])
 print paths
 
 #These are just for checking values
